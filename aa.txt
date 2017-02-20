@@ -1,1 +1,125 @@
-bbb
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>用户头像截取</title>
+
+    <!-- Bootstrap -->
+    <link href="lib/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        body {
+            font-family: 'Microsoft YaHei';
+        }
+
+        #clipArea {
+            margin: 20px;
+            height: 300px;
+        }
+
+        #file,
+        #clipBtn {
+            margin: 20px;
+        }
+
+        #view {
+            margin: 0 auto;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 页面头部 -->
+    <div class="row">
+        <h1>头像上传页面</h1>
+        <hr/>
+    </div>
+
+    <!--提示消息框-->
+    <div class="row" id="info">
+        <div class="input-group col-sm-6 col-xs-10 col-xs-offset-1">
+            <div id="infoMsg" class="alert alert-info" role="alert">尊敬的用户，请上传用户头像：</div>
+        </div>
+    </div>
+
+    <!--头像截取区域-->
+    <div class="row">
+        <div class="input-group col-sm-6 col-xs-10 col-xs-offset-1">
+            <div id="clipArea"></div>
+            <input type="file" id="file">
+            <button id="clipBtn">截取</button>
+            <div id="view"></div>
+        </div>
+    </div>
+
+    <!--保存按钮-->
+    <div class="row">
+        <div class="input-group col-sm-6 col-xs-10 col-xs-offset-1">
+            <input type="button" id="btnReg" class="btn btn-primary pull-right" value="保存头像"/>
+        </div>
+    </div>
+
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="lib/PhotoClip.js-master/js/hammer.js"></script>
+    <script src="lib/PhotoClip.js-master/js/iscroll-zoom.js"></script>
+    <script src="lib/PhotoClip.js-master/js/lrz.all.bundle.js"></script>
+    <script src="lib/PhotoClip.js-master/js/PhotoClip.js"></script>
+
+    <script>
+        var clipArea = new PhotoClip("#clipArea", {
+             // 截取框的宽和高组成的数组。默认值为[260,260]
+            size: [260, 260],
+             // 截取框自适应，截取框宽和高的百分比组成的数组。默认为 null。
+             // 如果设置了该参数，且值有效，则会忽略 size 的大小设置，size 中的值仅用于计算宽高比。
+             // 当设置了其中一个值得百分比时，如果另一个未设置，则将会按 size 中的比例等比缩放。
+            adaptive: null,
+             // 输出图像的宽和高组成的数组。默认值为[0,0]，表示输出图像原始大小
+            outputSize: [640, 640],
+           // 指定输出图片的类型，可选 "jpg" 和 "png" 两种种类型，默认为 "jpg"
+            outputType: "jpg",
+             // 输出质量，取值 0 - 1，默认为0.8。（这个质量不是最终输出的质量，与 lrzOption.quality 是相乘关系）
+            outputQuality: .8,
+             // 上传图片的<input type="file">控件的选择器或者DOM对象
+            file: "#file",
+             // 需要裁剪图片的url地址。该参数表示当前立即开始裁剪的图片，不需要使用 file 控件获取。注意，该参数不支持跨域图片。
+            source: "lib/PhotoClip.js-master/img/mm.jpg",
+             // 显示截取后图像的容器的选择器或者DOM对象
+            view: "#view",
+            // 确认截图按钮的选择器或者DOM对象
+            ok: "#clipBtn",
+            // 开始加载的回调函数。this指向当前 PhotoClip 的实例对象，并将正在加载的 file 对象作为参数传入（如果是使用 source 加载图片，则该参数为图片的 img 对象）
+            loadStart: function (file) {
+            },
+             // 加载完成的回调函数。this指向当前 PhotoClip 的实例对象，并将图片的 img 对象作为参数传入
+            loadComplete: function (img) {
+            },
+            // 加载失败的回调函数。this指向当前 PhotoClip 的实例对象，并将错误事件的 event 对象作为参数传入
+            loadError: function (event) {
+            },
+            clipFinish: function (dataURL) {
+                // console.log(dataURL);
+                localStorage.setItem('photo', dataURL);
+            } // 裁剪完成的回调函数。this指向当前 PhotoClip 的实例对象，会将裁剪出的图像数据DataURL作为参数传入
+
+        });
+       // clipArea.rotateCCW(45); // 逆时针旋转90度
+        // clipArea.setImg('lib/PhotoClip.js-master/img/mm.jpg'); // 重新读取裁剪图片
+        //clipArea.setSize(width, height); // 重新定义截取框的宽和高，如果设置了自适应，则等于重新定义宽高比例
+       // clipArea.setImg(src); // 重新读取裁剪图片
+        clipArea.rotateCW(); // 顺时针旋转90度
+       // clipArea.rotateCCW(); // 逆时针旋转90度
+       // clipArea.destroy(); // 销毁
+    </script>
+</div>
+</body>
+</html>
